@@ -5,7 +5,7 @@ media
 .DS_Store
 *.sqlite3
 *.env
-/djecommerce/settings.py
+/.djecommerce/settings.py
 
 # Accept these files in the repository
 !.gitignore
