@@ -5,10 +5,10 @@ media
 .DS_Store
 *.sqlite3
 *.env
+./djecommerce/settings.py
 
 # Accept these files in the repository
 !.gitignore
 !.travis.yml
 /.env
 /.vscode
-/djecommerce/settings.py
