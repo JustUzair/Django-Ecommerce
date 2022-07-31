@@ -11,4 +11,3 @@ media
 !.travis.yml
 /.env
 /.vscode
-./djecommerce/settings.py
