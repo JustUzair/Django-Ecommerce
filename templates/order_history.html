@@ -1,0 +1,126 @@
+{% extends 'base.html'%}
+{% block title %}Order History{% endblock title %}
+{% block extra_head %}
+<style>
+body{
+background:#eee;
+}
+.panel-order .row {
+	border-bottom: 1px solid #ccc;
+}
+.panel-order .row:last-child {
+	border: 0px;
+}
+.panel-order .row .col-md-1  {
+	text-align: center;
+	padding-top: 15px;
+}
+
+.panel-order .row .row {
+	border-bottom: 0;
+}
+.panel-order .row .col-md-11 {
+	border-left: 1px solid #ccc;
+}
+.panel-order .row .row .col-md-12 {
+	padding-top: 7px;
+	padding-bottom: 7px; 
+}
+.panel-order .row .row .col-md-12:last-child {
+	font-size: 11px; 
+	background: #efefef;
+}
+.panel-order .btn-group {
+	margin: 0px;
+	padding: 0px;
+}
+.panel-order .panel-body {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.panel-order .panel-deading {
+	margin-bottom: 0;
+}        
+</style>
+{% endblock %}
+  {% block content %}
+<div class="container">
+  <div class="container bootdey">
+      <div class="panel panel-default panel-order">
+          <div class="panel-heading">
+          
+          <label style="font-size:55px; margin-top:15px;color:white; border-top-right-radius:20px; border-bottom-left-radius:20px;" class="badge badge-dark" ><label style="color:orange">Order </label> <strong>History</strong></label>
+          
+          </div>
+          {% if order_qs %}
+            {% for i in order_qs %}
+          <div class="panel-body">
+          
+              <div class="row">
+                  <div class="col-md-11">
+                      <div class="row" style="background-color:#DFE3DE">
+                      
+                          <div class="col-md-12">
+                              <div class="pull-right"><label style="font-size:20px;"><b>Status:</b> </label>
+                              
+                              {% if  i.being_delivered and i.ordered%}
+                              <label class="badge badge-default" style="font-size:16px; margin-left:5px">
+                              Dispatched
+                              </label>
+                              {% elif i.requested_refund %}
+                              <label class="badge badge-danger" style="font-size:16px; margin-left:5px">
+                              Refund Requested
+                              </label>
+                              {% elif i.refund_status %}
+                              <label class="badge badge-info" style="font-size:16px; margin-left:5px; display:inline-block">
+                              Refund Granted
+                              </label>
+                              <label class="badge badge-danger" style="font-size:16px; margin-left:5px;">
+                              Cancelled
+                              </label>
+                              {% elif i.ordered %}
+                              <label class="badge badge-success" style="font-size:16px; margin-left:5px">
+                              In Transit
+                              </label>
+                              {% endif %}
+                              </div>
+                              <span style="font-size:22px;"><strong>Order Ref Code/Ref Code:</strong></span> <span class="badge badge-dark" style="font-size:18px; ">{{i.ref_code}}</span><br />
+                              <span style="font-size:22px;"><strong>Total Amount:</strong></span> <span class="badge badge-dark" style="font-size:18px; ">{{i.get_total}}</span><br />
+                              {% if i.requested_refund or  i.refund_status %}
+                                {% if i.refund_status %}
+                                  <span style="font-size:22px;"><strong>Refund Amount:</strong></span> <span class="badge badge-dark" style="font-size:18px; ">{{i.get_total}}</span><br />
+                                {% else %}
+                                  <span style="font-size:22px;"><strong>Amount to be refunded:</strong></span> <span class="badge badge-dark" style="font-size:18px; ">{{i.get_total}}</span><br />
+                                {% endif %}
+                              {% else %}
+                              <span style="font-size:22px; "><strong>Cancel Order / Request Refund:</strong></span> <a class="btn btn-danger btn-sm" style="float:right; margin-bottom:10px"  name="btnAddMore" href="{% url 'request-refund' %}">Cancel Order</a>
+                              {% endif %}
+                              <hr style="margin-top:20px">
+                              
+                              {% for item in i.items.all %}
+                              <span style="font-size:22px;"><strong>Item : </strong></span> <span class="badge badge-light badge-lg" style="font-size:18px; padding-left:15px; padding-right:15px; padding-top:5px; padding-bottom:5px; ">{{forloop.counter}}</span><br />
+                              <span style="font-size:22px;"><strong>Item Title : </strong></span> <span class="badge badge-light badge-lg" style="font-size:18px; padding-left:15px; padding-right:15px; padding-top:5px; padding-bottom:5px; ">{{item.item.title}}</span><br />
+                              <span style="font-size:22px;"><strong>Quantity : </strong></span> <span class="badge badge-light badge-lg" style="font-size:18px; padding-left:15px; padding-right:15px; padding-top:5px; padding-bottom:5px; ">{{item.quantity}}</span><br />
+                              <span style="font-size:22px;"><strong>Size : </strong></span> <span class="badge badge-light badge-lg" style="font-size:18px; padding-left:15px; padding-right:15px; padding-top:5px; padding-bottom:5px; ">
+                              {% if item.item.is_footwear %}
+                                {{item.footwear_size}}
+                              {% else %}
+                              {{item.cloth_size}}
+                              {% endif %}</span><br />
+                              <span style="font-size:22px;"><strong>Color : </strong></span> <span class="badge badge-light badge-lg" style="font-size:18px; padding-left:15px; padding-right:15px; padding-top:5px; padding-bottom:5px; ">{{item.color}}</span><br />
+                              <hr>
+                              {% endfor %}
+                          </div>
+                          <div class="col-md-12" style="font-size:22px;background-color:#F4F4F4"><b>Ordered On:</b> <label class="badge badge-light" style="font-size:16px;">{{i.ordered_date}}</label></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <h1 style="font-size:40px; color:red;margin-bottom:610px">No Previous Order Found!!</h1>
+          {% endif %}
+      </div>
+  </div>
+</div>
+  {% endblock content%}

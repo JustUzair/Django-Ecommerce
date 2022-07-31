@@ -1,0 +1,159 @@
+{% extends 'base.html'%}
+{% load static %}
+
+  {% block title %}Search{% endblock title %}
+  {% block extra_head %}
+<style>
+
+/*-----------------slider CSS-------------------*/
+  .slider
+  {
+    width:79%;
+    margin-left:200px;
+    margin-right:200px;
+    padding: 0 10px;
+    margin-top:25px;
+    
+  }
+  .carousel
+  {
+      box-shadow: 1px 1px 4px 1px rgba(0,0,0,0.5);
+  }
+  .carousel-indicators
+  {
+      z-index: 1 !important;
+  }
+  @media only screen and (max-width: 980px)
+  {
+      .slider
+      {
+          width: 100%;
+          margin-left: 0;
+      }
+  }
+  .contcustom{
+    margin-left:400px;
+    margin-right:400px;
+    }
+</style>
+
+  {% endblock extra_head %}
+  {% block content %}
+        
+  <!--Main layout-->
+<main>
+    <div class="container">
+      
+    <h3></h3>
+      <!--Section: Products v.3-->
+      <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row wow fadeIn mt-5"  id="prods">
+
+          <!--Grid column-->
+          {% for result in object_list %}
+          <div class="col-lg-3 col-md-6 mb-5">
+
+            <!--Card-->
+            <div class="card">
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="{{result.cover_image.url}}" class="card-img-top"
+                  alt="" style="height:300px;width:100%;">
+                <a href="{{result.get_absolute_url}}">
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>{{ result.category }}</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="{{result.get_absolute_url}}" class="dark-grey-text">{{result.title}}
+                      <br><span class="badge badge-pill {{ result.get_label_display}}-color">
+                    {% if result.get_label_display == 'primary' %}
+                        NEW
+                    {% elif result.get_label_display == 'secondary' %}
+                        BESTSELLER
+                    {% elif result.get_label_display == 'danger'%}
+                        HOT
+                    {% endif %}
+                      
+                      </span>
+                    </a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>₹
+                  {% if result.discount_price %}
+                    {{result.discount_price}}
+                  {% else %}
+                    {{result.price}}
+                  {% endif %}
+                  </strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          {% empty %}
+          <h3>No products found!!!!</h3>
+          {% endfor %}
+          <!--Grid column-->
+        </div>
+        <!--Grid row-->
+
+      </section>
+      <!--Section: Products v.3-->
+
+      <!--Pagination-->
+      
+      {% if is_paginated%}
+      <nav class="d-flex justify-content-center wow fadeIn" >
+        <ul class="pagination pg-primary" >
+
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+            <a style="border-radius: 25px; margin-right:2px; margin-left:2px;" class="page-link" aria-label="Previous" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                <span aria-hidden="true"><strong>&laquo;</strong></span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+          {% endif %}
+
+            <li class="page-item pag-link active"><a style="border-radius: 25px; margin-right:2px; margin-left:2px;" class="page-link" href="?page={{page_obj.number}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><strong>{{page_obj.number}}<strong></a></li>
+          
+          {% if page_obj.has_next%}
+            <li class="page-item">
+              <a style="border-radius: 25px; margin-right:2px; margin-left:2px;" class="page-link" aria-label="Next" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                <span aria-hidden="true"><strong>&raquo;</strong></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          {% endif %}     
+
+        </ul>
+      </nav>
+      {% endif %}
+      <!--Pagination-->
+  </div>
+</main>
+  <!--Main layout-->
+
+  {% endblock content %}
+
+  
+
+  
+

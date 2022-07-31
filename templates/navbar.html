@@ -1,0 +1,167 @@
+{% load static %}
+{% load cart_template_tags %}
+{% block extra_head%}
+    <style>
+    
+        
+    /*Nested DropDown*/
+	@media screen and (min-width: 992px){
+		.dropdown-menu .dropdown-toggle:after{
+			border-top: .3em solid transparent;
+		    border-right: 0;
+		    border-bottom: .3em solid transparent;
+		    border-left: .3em solid;
+		}
+
+		.dropdown-menu .dropdown-menu{
+			margin-left:0; margin-right: 0;
+		}
+
+		.dropdown-menu li{
+			position: relative;
+		}
+		.nav-item .submenu{ 
+			display: none;
+			position: absolute;
+			left:100%; top:-7px;
+		}
+		.nav-item .submenu-left{ 
+			right:100%; left:auto;
+		}
+
+		.dropdown-menu > li:hover{ background-color: #f1f1f1 }
+		.dropdown-menu > li:hover > .submenu{
+			display: block;
+		}
+        ul.nav li.dropdown:hover > ul.dropdown-menu {
+            display: block;
+        }
+        /*Navbar Visible*/
+
+        .navbar-default {
+            overflow: visible;
+            }
+        ul.nav li.dropdown:hover > ul.dropdown-menu {
+            display: block;    
+        }
+        
+	}
+    </style>
+    <script type="text/javascript">
+/// some script
+
+// jquery ready start
+$(document).ready(function() {
+	// jQuery code
+
+	//////////////////////// Prevent closing from click inside dropdown
+    $(document).on('click', '.dropdown-menu', function (e) {
+      e.stopPropagation();
+    });
+
+    // make it as accordion for smaller screens
+    if ($(window).width() < 992) {
+	  	$('.dropdown-menu a').click(function(e){
+	  		e.preventDefault();
+	        if($(this).next('.submenu').length){
+	        	$(this).next('.submenu').toggle();
+	        }
+	        $('.dropdown').on('hide.bs.dropdown', function () {
+			   $(this).find('.submenu').hide();
+			})
+	  	});
+	}
+	
+}); 
+
+$('.nav-main .dropdown-submenu > a:not(a[href="#"])').on('click', function() {
+    self.location = $(this).attr('href');
+});
+// jquery end
+</script>
+{% endblock %}
+<!-- Navbar -->
+ 
+    <nav id="navigation-bar"class="navbar navbar-expand-lg navbar-light" style="margin-bottom:-70px;">
+        <a class="navbar-brand waves-effect" href="{% url 'home' %}" >
+            <strong class="blue-text">ShopCygen</strong>
+        </a>
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+          aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+          <!-- Links -->
+          <ul class="navbar-nav">
+            
+            {% comment%}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle waves-effect" href="#" data-toggle="dropdown">  Categories  </a>
+                <ul class="dropdown-menu">
+                <li><a class="dropdown-item waves-effect" href="#"> All </a></li>
+                <li><a class="dropdown-item waves-effect" href="#"> Shoes </a></li>
+                <li><a class="dropdown-item waves-effect" href="#"> T-shirts </a></li>
+                <li><a class="dropdown-item waves-effect" href="#"> Jeans </a></li>
+                <li><a class="dropdown-item waves-effect" href="#"> Sports Wear </a></li>
+                <li><a class="dropdown-item waves-effect" href="#"> OutWear </a></li>
+                </ul>
+            </li>
+            {% endcomment %}
+            <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle waves-effect" href="#" data-toggle="dropdown"> <i class="fa fa-user icon"></i>  My Account  </a>
+                    <ul class="dropdown-menu">
+                        <a class="dropdown-item  " href= "{% url 'user_profile'%}">                    
+                        My Profile
+                        </a>
+                        <a class="dropdown-item  " href= "{% url 'order_history'%}">                    
+                        View Order History
+                        </a>
+                        <a class="dropdown-item  " href= "{% url 'account_logout'%}">                    
+                        Logout
+                        </a>
+                    </ul>
+            </li>
+            {% else %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle waves-effect" href="#" data-toggle="dropdown"> Account  </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item " href="{% url 'account_login'%}"> Login </a></li>
+                    <li><a class="dropdown-item " href="{% url 'account_signup'%}"> SignUp </a> </li>    
+                </ul> 
+            </li>     
+            {% endif %}
+        </ul>
+          <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+            
+            </ul>
+            <ul class="navbar-nav nav-flex-icons">
+            {% if request.user.is_authenticated %}
+                
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href="{% url 'order-summary' %}">
+                    <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="clearfix d-none d-sm-inline-block mr-2"> Cart </span>
+                    </a>
+                </li>
+            
+                
+            {% endif %}
+            </ul>
+        <form class="form-inline md-form d-flex justify-content-center   " method="GET" action="{% url 'search' %}">
+            <input style="margin-top:none; margin-right:5px; width:200px"class="form-control" name="q" type="text" placeholder="Product Name or Category" aria-label="Search">
+            <button class="btn btn-elegant btn-rounded btn-sm my-0" type="submit">Search</button>    
+        </form>
+        </div>
+        
+        <!-- Collapsible content -->
+
+      </nav>
+    <!-- Navbar -->

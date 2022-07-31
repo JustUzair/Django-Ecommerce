@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <h1>Edit Profile</h1>
+  	<hr>
+	<div class="row">
+      <!-- left column -->
+      
+      
+      <!-- edit form column -->
+      <div class="col-md-12 personal-info">
+
+        <h3>Personal info</h3><br>
+        <h5 style="color:red">***Only fill the fields that require changes!!</h5>
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Change or Upload Profile photo</label>
+                <div class="col-lg-8">
+                        <input type="file" name="image" accept=".png,.jpg,.jpeg,.eps"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Username:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Mobile Number:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="tel" name="phone" pattern="[0-9]{10}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">State:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="text" name="state">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">City:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="text" name="city" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Resident Address Line 1:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="text" name="resident_address_1" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Resident Address Line 2:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="text" name="resident_address_2" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Pincode:</label>
+                <div class="col-lg-8">
+                <input class="form-control" type="text" name="pincode">
+                </div>
+            </div>            
+            <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div class="container">
+                <input type="submit" class="btn btn-primary" value="Save Changes">
+                <span></span>
+                <a class="btn btn-danger" href="{% url 'user_profile'%}">Cancel</a>
+                </div>
+            </div>
+        </form>
+      </div>
+  </div>
+</div>
+{% endblock %}
